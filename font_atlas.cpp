@@ -92,24 +92,41 @@ glm::vec2 FontAtlas::get_text_dimensions_in_ndc(const std::string &text, float s
     return glm::vec2(total_width_ndc, max_height_ndc);
 }
 
-TextMesh FontAtlas::generate_text_mesh_with_width(const std::string &text, float x, float y, float width_ndc,
-                                                  float padding_percentage) {
+TextMesh FontAtlas::generate_text_mesh_size_constraints(const std::string &text, float x, float y, float width_ndc,
+                                                        float height_ndc, float padding_percentage) {
     float default_scale = 1.0f;
+
+    // Get text dimensions in NDC
     glm::vec2 text_dimensions_ndc = get_text_dimensions_in_ndc(text, default_scale);
 
     float text_width_ndc = text_dimensions_ndc.x;
     float text_height_ndc = text_dimensions_ndc.y;
 
+    // Calculate padding
     float padding_ndc_x = width_ndc * padding_percentage;
-    float padding_ndc_y = padding_ndc_x;
+    float padding_ndc_y = height_ndc * padding_percentage; // Adjust padding based on height
 
     float available_width_ndc = width_ndc - 2.0f * padding_ndc_x;
+    float available_height_ndc = height_ndc - 2.0f * padding_ndc_y;
 
-    float scale_factor = available_width_ndc / text_width_ndc;
+    // Calculate scale factors based on width and height
+    float scale_factor_width = available_width_ndc / text_width_ndc;
+    float scale_factor_height = available_height_ndc / text_height_ndc;
 
+    // Use the minimum scale factor to ensure the text fits both dimensions
+    float scale_factor = std::min(scale_factor_width, scale_factor_height);
+
+    // Adjust position
     float adjusted_x = x + padding_ndc_x;
     float adjusted_y = y + padding_ndc_y;
 
+    bool centered = true;
+    if (centered) {
+        adjusted_x -= (text_width_ndc * scale_factor) / 2.0f;
+        adjusted_y -= (text_height_ndc * scale_factor) / 2.0f;
+    }
+
+    // Generate text mesh with the adjusted scale
     TextMesh mesh = generate_text_mesh(text, adjusted_x, adjusted_y, scale_factor);
 
     return mesh;
