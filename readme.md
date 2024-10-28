@@ -1,6 +1,17 @@
 # font atlas
 
-A system which helps you work with font atlases, in order to work with this you need to have a json file which defines your fonts drawing information, it will have this form:
+A system which helps you work with font atlases. 
+
+# warning
+Also be sure to include this in exactly one other source file or else it will not work
+
+```cpp
+#define STB_IMAGE_IMPLEMENTATION 
+```
+
+# format of files
+
+In order to work with this you need to have a json file which defines your fonts drawing information, it will have this form:
 ```json
 
 {
