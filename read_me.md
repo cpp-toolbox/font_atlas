@@ -115,3 +115,34 @@ In order to work with this you need to have a json file which defines your fonts
 }
 ```
 the units of the width and height are measured in pixels, the average width in the above is 40.47 pixelsthe reasoning for their values comes from the underlying font atlas and their bounding boxes sizes in the image, as of right now the average screen has width 1920 and then we can compute 40/1920 = 0.02 = 1/50 meaning that on average you can get up to 50 chars on the screen so long as you scale things down by a factor of a thousand or something like that, thus simply making an ortho matrix with the screen dimensions can help you get the sizing right.
+
+When creating a font atlas using cpp-toolbox, then we do something like this: 
+
+```cpp
+    glDisable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    FontAtlas font_atlas("assets/fonts/times_64_sdf_atlas_font_info.json", "assets/fonts/times_64_sdf_atlas.json",
+                         "assets/fonts/times_64_sdf_atlas.png", SCREEN_WIDTH, false, true);
+
+    glm::mat4 projection = glm::mat4(1);
+    auto text_color = glm::vec3(0.5, 0.5, 1);
+    float char_width = 0.5;
+    float edge_transition = 0.1;
+
+    shader_cache.use_shader_program(ShaderType::TRANSFORM_V_WITH_SIGNED_DISTANCE_FIELD_TEXT);
+    shader_cache.set_uniform(ShaderType::TRANSFORM_V_WITH_SIGNED_DISTANCE_FIELD_TEXT, ShaderUniformVariable::TRANSFORM,
+                             projection);
+
+    shader_cache.set_uniform(ShaderType::TRANSFORM_V_WITH_SIGNED_DISTANCE_FIELD_TEXT, ShaderUniformVariable::RGB_COLOR,
+                             text_color);
+
+    shader_cache.set_uniform(ShaderType::TRANSFORM_V_WITH_SIGNED_DISTANCE_FIELD_TEXT,
+                             ShaderUniformVariable::CHARACTER_WIDTH, char_width);
+
+    shader_cache.set_uniform(ShaderType::TRANSFORM_V_WITH_SIGNED_DISTANCE_FIELD_TEXT,
+                             ShaderUniformVariable::EDGE_TRANSITION_WIDTH, edge_transition);
+  ```
+
+Also note that before drawing you should make sure that the font atlas texture is bound with `glBindTexture` or else it might not show up.
