@@ -9,11 +9,13 @@ Also be sure to include this in exactly one other source file or else it will no
 #define STB_IMAGE_IMPLEMENTATION 
 ```
 
+I recommend to put it in your `main.cpp` to help you keep track
+
 # format of files
 
 In order to work with this you need to have a json file which defines your fonts drawing information, it will have this form:
-```json
 
+```json
 {
   "characters": {
     "0":{"width":41,"height":56,"originX":4,"originY":49,"advance":32},
@@ -114,7 +116,12 @@ In order to work with this you need to have a json file which defines your fonts
   }
 }
 ```
+
+## average measurements
+
 the units of the width and height are measured in pixels, the average width in the above is 40.47 pixelsthe reasoning for their values comes from the underlying font atlas and their bounding boxes sizes in the image, as of right now the average screen has width 1920 and then we can compute 40/1920 = 0.02 = 1/50 meaning that on average you can get up to 50 chars on the screen so long as you scale things down by a factor of a thousand or something like that, thus simply making an ortho matrix with the screen dimensions can help you get the sizing right.
+
+## setting up
 
 When creating a font atlas using cpp-toolbox, then we do something like this: 
 
