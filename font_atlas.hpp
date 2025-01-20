@@ -34,6 +34,8 @@ class FontAtlas {
     glm::vec2 get_text_dimensions_in_ndc(const std::string &text, float scale) const;
     TextMesh generate_text_mesh(const std::string &text, float x, float y, float scale = 1);
 
+    TextMesh generate_text_mesh_size_constraints(const std::string &text, Rectangle ndc_rect,
+                                                 float padding_percentage = 0);
     TextMesh generate_text_mesh_size_constraints(const std::string &text, float x, float y, float width_ndc,
                                                  float height_ndc, float padding_percentage = 0);
 

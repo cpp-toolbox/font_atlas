@@ -92,6 +92,11 @@ glm::vec2 FontAtlas::get_text_dimensions_in_ndc(const std::string &text, float s
     return glm::vec2(total_width_ndc, max_height_ndc);
 }
 
+TextMesh FontAtlas::generate_text_mesh_size_constraints(const std::string &text, Rectangle ndc_rect,
+                                                        float padding_percentage) {
+    return generate_text_mesh_size_constraints(text, ndc_rect.center.x, ndc_rect.center.y, ndc_rect.width,
+                                               ndc_rect.height);
+}
 TextMesh FontAtlas::generate_text_mesh_size_constraints(const std::string &text, float x, float y, float width_ndc,
                                                         float height_ndc, float padding_percentage) {
     float default_scale = 1.0f;
