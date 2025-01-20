@@ -38,6 +38,7 @@ class FontAtlas {
                                                  float padding_percentage = 0);
     TextMesh generate_text_mesh_size_constraints(const std::string &text, float x, float y, float width_ndc,
                                                  float height_ndc, float padding_percentage = 0);
+    TextureAtlas texture_atlas;
 
   private:
     int num_chars_per_screen_width = 50;
@@ -49,7 +50,6 @@ class FontAtlas {
     bool italic;
     int atlas_width, atlas_height;
 
-    TextureAtlas texture_atlas;
     std::unordered_map<char, Character> characters;
 };
 
