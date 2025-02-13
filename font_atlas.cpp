@@ -92,7 +92,7 @@ glm::vec2 FontAtlas::get_text_dimensions_in_ndc(const std::string &text, float s
     return glm::vec2(total_width_ndc, max_height_ndc);
 }
 
-TextMesh FontAtlas::generate_text_mesh_size_constraints(const std::string &text, Rectangle ndc_rect,
+TextMesh FontAtlas::generate_text_mesh_size_constraints(const std::string &text, vertex_geometry::Rectangle ndc_rect,
                                                         float padding_percentage) {
     return generate_text_mesh_size_constraints(text, ndc_rect.center.x, ndc_rect.center.y, ndc_rect.width,
                                                ndc_rect.height);
@@ -158,7 +158,7 @@ TextMesh FontAtlas::generate_text_mesh(const std::string &text, float x, float y
         float w = ch.width_px * scale;
         float h = ch.height_px * scale;
 
-        std::vector<glm::vec3> char_vertices = generate_rectangle_vertices(xpos + w / 2, ypos + h / 2, w, h);
+        std::vector<glm::vec3> char_vertices = vertex_geometry::generate_rectangle_vertices(xpos + w / 2, ypos + h / 2, w, h);
 
         mesh.vertex_positions.insert(mesh.vertex_positions.end(), char_vertices.begin(), char_vertices.end());
 
@@ -166,13 +166,13 @@ TextMesh FontAtlas::generate_text_mesh(const std::string &text, float x, float y
         mesh.texture_coordinates.insert(mesh.texture_coordinates.end(), ch.uv_coordinates.begin(),
                                         ch.uv_coordinates.end());
 
-        std::vector<unsigned int> char_indices = generate_rectangle_indices();
+        std::vector<unsigned int> char_indices = vertex_geometry::generate_rectangle_indices();
         index_batches.push_back(char_indices);
 
         x += (ch.x_dist_to_next_char_px * scale);
     }
 
-    mesh.indices = flatten_and_increment_indices(index_batches);
+    mesh.indices = vertex_geometry::flatten_and_increment_indices(index_batches);
 
     return mesh;
 }
