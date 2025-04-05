@@ -24,6 +24,8 @@ struct TextMesh {
     std::vector<glm::vec2> texture_coordinates;
 };
 
+// NOTE: the font atlas doesn't use the packed textures yet, it simply loads the image directly
+// in the future this can be modified, note that you have to bind the right texture before using it in this case.
 class FontAtlas {
   public:
     FontAtlas(const std::string &font_info_json_filepath, const std::string &texture_atlas_json_filepath,
