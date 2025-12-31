@@ -94,8 +94,8 @@ glm::vec2 FontAtlas::get_text_dimensions_in_ndc(const std::string &text, float s
 
 TextMesh FontAtlas::generate_text_mesh_size_constraints(const std::string &text, vertex_geometry::Rectangle ndc_rect,
                                                         float padding_percentage) {
-    return generate_text_mesh_size_constraints(text, ndc_rect.center.x, ndc_rect.center.y, ndc_rect.width,
-                                               ndc_rect.height);
+    return generate_text_mesh_size_constraints(text, ndc_rect.center.x, ndc_rect.center.y, ndc_rect.get_u_extent_size(),
+                                               ndc_rect.get_v_extent_size());
 }
 TextMesh FontAtlas::generate_text_mesh_size_constraints(const std::string &text, float x, float y, float width_ndc,
                                                         float height_ndc, float padding_percentage) {
@@ -158,7 +158,8 @@ TextMesh FontAtlas::generate_text_mesh(const std::string &text, float x, float y
         float w = ch.width_px * scale;
         float h = ch.height_px * scale;
 
-        std::vector<glm::vec3> char_vertices = vertex_geometry::generate_rectangle_vertices(xpos + w / 2, ypos + h / 2, w, h);
+        std::vector<glm::vec3> char_vertices =
+            vertex_geometry::generate_rectangle_vertices(xpos + w / 2, ypos + h / 2, w, h);
 
         mesh.vertex_positions.insert(mesh.vertex_positions.end(), char_vertices.begin(), char_vertices.end());
 
